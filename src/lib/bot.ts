@@ -7,6 +7,7 @@ import type {
 import atproto from "@atproto/api";
 const { BskyAgent, RichText } = atproto;
 
+
 type BotOptions = {
   service: string | URL;
   dryRun: boolean;
@@ -37,9 +38,18 @@ export default class Bot {
     if (typeof text === "string") {
       const richText = new RichText({ text });
       await richText.detectFacets(this.#agent);
+      console.log(richText.facets)
       const record = {
         text: richText.text,
         facets: richText.facets,
+        embed: {
+          $type: 'app.bsky.embed.external',
+          external: {
+            uri: "https://www.youtube.com/watch?v=UEzhlFqtAJk",
+            title: "Fall Out Boy - Saturday",
+            description: "Fall Out Boy - Saturday (Official Video)",
+          }
+        }
       };
       return this.#agent.post(record);
     } else {
